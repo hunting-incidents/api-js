@@ -7,8 +7,8 @@ The project may or may not stay in NestJS depending on the POC outcome.
 ## TODO
 
 ### Stage 0 — Infra & Skeleton
-- [ ] Create a `docker-compose.yml` to start API + Postgres + Redis (+ Mailpit, Otel-collector, Prometheus as optional)
-- [ ] Add configuration handling (`@nestjs/config` + Joi validation)
+- [X] Create a `docker-compose.yml` to start API + Postgres + Redis (+ Mailpit, Otel-collector, Prometheus as optional)
+- [X] Add configuration handling (`@nestjs/config`)
 - [ ] Enable JSON structured logs (nestjs-pino)
 - [ ] Add `/healthz` endpoint for liveness check
 
@@ -33,3 +33,6 @@ The project may or may not stay in NestJS depending on the POC outcome.
 - [ ] Expose Prometheus metrics (`/metrics`) with `prom-client`
 - [ ] Add OTEL tracing (HTTP + Prisma/Postgres) via otel-collector
 - [ ] Correlate logs ↔ traces (inject `traceId` into pino logs)
+
+### Stage 5 — Finish
+- [ ] Joi validation of config
