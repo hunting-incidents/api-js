@@ -9,7 +9,7 @@ The project may or may not stay in NestJS depending on the POC outcome.
 ### Stage 0 — Infra & Skeleton
 - [X] Create a `docker-compose.yml` to start API + Postgres + Redis (+ Mailpit, Otel-collector, Prometheus as optional)
 - [X] Add configuration handling (`@nestjs/config`)
-- [ ] Enable JSON structured logs (nestjs-pino)
+- [X] Enable JSON structured logs (nestjs-pino)
 - [ ] Add `/healthz` endpoint for liveness check
 
 ### Stage 1 — Data & Listing

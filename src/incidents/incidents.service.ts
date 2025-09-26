@@ -1,17 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { CreateIncidentDto } from './dto/create-incident.dto';
 import { UpdateIncidentDto } from './dto/update-incident.dto';
 import { ListIncidentsDto } from './dto/list-incident.dto';
 
 @Injectable()
 export class IncidentsService {
+  private readonly logger = new Logger(IncidentsService.name);
+
   create(createIncidentDto: CreateIncidentDto) {
     return 'This action adds a new incident';
   }
 
   findAll(filter: ListIncidentsDto) {
-    console.log('filter', filter);
-
     return `This action returns all incidents`;
   }
 
