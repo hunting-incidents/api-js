@@ -1,5 +1,11 @@
 # Hunting Incident API
 
+[![CI](https://github.com/hunting-incidents/api-js/actions/workflows/ci.yml/badge.svg)](https://github.com/hunting-incidents/api-js/actions/workflows/ci.yml)
+
+[![E2E Tests](https://github.com/hunting-incidents/api-js/actions/workflows/e2e.yml/badge.svg)](https://github.com/hunting-incidents/api-js/actions/workflows/e2e.yml)
+
+
+
 This repository contains the backend API for the hunting incident management system. This is a NestJS POC for the service, used as a learning project for myself (@wolf29f) to discover and learn more about NestJS.
 
 The project may or may not stay in NestJS depending on the POC outcome.
