@@ -4,7 +4,7 @@ import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { AppModule } from './../src/app.module';
 
-describe('AppController (e2e)', () => {
+describe('HealthController (e2e)', () => {
   let app: INestApplication;
 
   beforeEach(async () => {
@@ -16,9 +16,11 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
-  it('/ (GET)', async () => {
-    const response = await request(app.getHttpServer()).get('/').expect(200);
+  it('/healthz (GET)', async () => {
+    const response = await request(app.getHttpServer())
+      .get('/healthz')
+      .expect(200);
 
-    expect(response.text).toBe('Hello World!');
+    expect(response.body).toEqual({ status: 'ok' });
   });
 });
