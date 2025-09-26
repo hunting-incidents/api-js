@@ -12,4 +12,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   await app.listen(configService.get<number>('api.port') || 3000);
 }
-bootstrap();
+bootstrap().catch((error) => {
+  console.error('Error starting the application:', error);
+  process.exit(1);
+});

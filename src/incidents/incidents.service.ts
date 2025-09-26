@@ -7,11 +7,11 @@ import { ListIncidentsDto } from './dto/list-incident.dto';
 export class IncidentsService {
   private readonly logger = new Logger(IncidentsService.name);
 
-  create(createIncidentDto: CreateIncidentDto) {
+  create(_createIncidentDto: CreateIncidentDto) {
     return 'This action adds a new incident';
   }
 
-  findAll(filter: ListIncidentsDto) {
+  findAll(_filter: ListIncidentsDto) {
     return `This action returns all incidents`;
   }
 
@@ -19,7 +19,7 @@ export class IncidentsService {
     return `This action returns a #${id} incident`;
   }
 
-  update(id: number, updateIncidentDto: UpdateIncidentDto) {
+  update(id: number, _updateIncidentDto: UpdateIncidentDto) {
     return `This action updates a #${id} incident`;
   }
 
