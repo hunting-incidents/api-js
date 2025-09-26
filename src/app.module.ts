@@ -3,6 +3,7 @@ import { IncidentsModule } from './incidents/incidents.module';
 import { ConfigModule } from '@nestjs/config';
 import apiConfig from './config/api.config';
 import { LoggerModule } from 'nestjs-pino/LoggerModule';
+import { HealthModule } from './health/health.module';
 
 const isDev = process.env.NODE_ENV !== 'production';
 
@@ -32,6 +33,7 @@ const isDev = process.env.NODE_ENV !== 'production';
         },
       },
     }),
+    HealthModule,
     IncidentsModule,
   ],
 })

@@ -10,7 +10,7 @@ The project may or may not stay in NestJS depending on the POC outcome.
 - [X] Create a `docker-compose.yml` to start API + Postgres + Redis (+ Mailpit, Otel-collector, Prometheus as optional)
 - [X] Add configuration handling (`@nestjs/config`)
 - [X] Enable JSON structured logs (nestjs-pino)
-- [ ] Add `/healthz` endpoint for liveness check
+- [X] Add `/healthz` endpoint for liveness check
 
 ### Stage 1 — Data & Listing
 - [ ] Connect Postgres with Prisma (migrations, minimal seed)
