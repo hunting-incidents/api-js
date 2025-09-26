@@ -1,0 +1,118 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/postgres
+      - REDIS_URL=redis://redis:6379
+      - SMTP_HOST=mailpit
+      - SMTP_PORT=1025
+      - SMTP_USER=
+      - SMTP_PASS=
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      mailpit:
+        condition: service_healthy
+    networks:
+      - hunting_incident_js_network
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/healthz', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) }).on('error', () => { process.exit(1) })"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  postgres:
+    image: postgis/postgis:14-3.4-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-postgres}
+      PGDATA: /data/postgres
+    volumes:
+      - postgres_js:/data/postgres
+    ports:
+      - "5433:5432"  # Different port to avoid conflict with api Go
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - hunting_incident_js_network
+
+  redis:
+    image: redis:7.4.0-alpine
+    ports:
+      - "6380:6379"  # Different port to avoid conflict with api Go
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - hunting_incident_js_network
+
+  mailpit:
+    image: axllent/mailpit:v1.20.5
+    ports:
+      - "8026:8025"  # Different port to avoid conflict with api Go
+      - "1026:1025"  # Different port to avoid conflict with api Go
+    environment:
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1
+    networks:
+      - hunting_incident_js_network
+    healthcheck:
+      test: /usr/bin/nc -v localhost 1025
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Optional services for observability (Stage 4)
+  prometheus:
+    image: prom/prometheus:v2.48.1
+    ports:
+      - "9091:9090"  # Different port to avoid conflict
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+    networks:
+      - hunting_incident_js_network
+    profiles:
+      - observability
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.89.0
+    ports:
+      - "4318:4318"   # OTLP HTTP receiver
+      - "4317:4317"   # OTLP gRPC receiver
+      - "8889:8889"   # Prometheus metrics exporter
+    volumes:
+      - ./otel-collector.yml:/etc/otel-collector-config.yml:ro
+    command: ["--config=/etc/otel-collector-config.yml"]
+    networks:
+      - hunting_incident_js_network
+    profiles:
+      - observability
+
+volumes:
+  postgres_js:
+    name: hunting_incidents_js_postgres
+
+networks:
+  hunting_incident_js_network:
+    driver: bridge
